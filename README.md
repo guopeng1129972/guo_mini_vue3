@@ -52,3 +52,8 @@ git config --global --unset https.proxy
    创建全局变量 activeEffect 绑定到当前 this
    实现 track (get 时) track：收集依赖 记录当前依赖 map（targetMap）targetMap， targetMap：当前依赖的 map , depsMap:记录具体哪个数据的 map，记录对应关系，每一个 dep 记录每一个 key
    实现 trigger (set 时) trigger:触发依赖 根据 targetMap 找到对应的 target 的对应 depMap 关系,依次出发 depMap 的 run 方法，实现动态绑定
+
+# 07-实现 effect 返回 runner
+
+实现 runner: effcet.run 对应的方法（fn）的 return 操作
+实现返回 fn 方法的 return 操作 就是返回实例对象的 run 方法 effect.run(),绑定到当前实例对象 effect 的作用域内 run 方法内部也返回当前 fn 方法

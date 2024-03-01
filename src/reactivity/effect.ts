@@ -5,7 +5,7 @@ class ReactiveEffect {
   }
   run() {
     activeEffect = this;
-    this._fn();
+    return this._fn();
   }
 }
 let activeEffect: any;
@@ -42,4 +42,6 @@ export function effect(fn: any) {
   const _effect = new ReactiveEffect(fn);
   // 调用 ReactiveEffect.run 就是执行fn方法
   _effect.run();
+  //bind 绑定this指向为_effect实例对象
+  return _effect.run.bind(_effect);
 }
