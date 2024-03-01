@@ -33,3 +33,22 @@ module.exports = {
   ],
 };
 ```
+
+# 上不上去 github
+
+git config --global --unset http.proxy
+git config --global --unset https.proxy
+
+# 06-实现 effect & reactive 依赖收集&触发依赖
+
+实现 get 收集依赖 触发 set 触发依赖
+
+1. 实现 reactive
+   reactive (实现对象的 getset，并通过 effect 来收集依赖（track）触发依赖（trigger）)
+   通过 Proxy 创建响应式对象 Reflect.get()Reflect.set() 同时执行 track （get）trigger(set)
+2. 实现 effect
+   创建 ReactiveEffect 类
+   get 时执行一遍 effect 的 run 方法 run 方法执行收集依赖进来的 fn
+   创建全局变量 activeEffect 绑定到当前 this
+   实现 track (get 时) track：收集依赖 记录当前依赖 map（targetMap）targetMap， targetMap：当前依赖的 map , depsMap:记录具体哪个数据的 map，记录对应关系，每一个 dep 记录每一个 key
+   实现 trigger (set 时) trigger:触发依赖 根据 targetMap 找到对应的 target 的对应 depMap 关系,依次出发 depMap 的 run 方法，实现动态绑定
