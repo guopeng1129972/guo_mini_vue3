@@ -57,3 +57,5 @@ git config --global --unset https.proxy
 
 实现 runner: effcet.run 对应的方法（fn）的 return 操作
 实现返回 fn 方法的 return 操作 就是返回实例对象的 run 方法 effect.run(),绑定到当前实例对象 effect 的作用域内 run 方法内部也返回当前 fn 方法
+
+# 08-实现 effect 的 scheduler 功能
