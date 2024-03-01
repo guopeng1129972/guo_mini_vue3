@@ -1,6 +1,7 @@
 class ReactiveEffect {
   private _fn: any;
-  constructor(fn: any) {
+  // 声明  scheduler 是 public的 可以不传的
+  constructor(fn: any, public scheduler?: any) {
     this._fn = fn;
   }
   run() {
@@ -34,12 +35,18 @@ export function trigger(target: any, key: any) {
   let depsMap = targetMap.get(target);
   let dep = depsMap.get(key);
   for (const effect of dep) {
-    effect.run();
+    // 如果存在scheduler 执行 scheduler 不然执行 run
+    if (effect.scheduler) {
+      effect.scheduler();
+    } else {
+      effect.run();
+    }
   }
 }
+
 // 依赖收集 就是收集 effect
-export function effect(fn: any) {
-  const _effect = new ReactiveEffect(fn);
+export function effect(fn: any, options: any = {}) {
+  const _effect = new ReactiveEffect(fn, options.scheduler);
   // 调用 ReactiveEffect.run 就是执行fn方法
   _effect.run();
   //bind 绑定this指向为_effect实例对象

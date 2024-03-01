@@ -59,3 +59,13 @@ git config --global --unset https.proxy
 实现返回 fn 方法的 return 操作 就是返回实例对象的 run 方法 effect.run(),绑定到当前实例对象 effect 的作用域内 run 方法内部也返回当前 fn 方法
 
 # 08-实现 effect 的 scheduler 功能
+
+scheduler 的实现逻辑
+
+1. 通过 effect 的第二个参数给定的 一个 scheduler 的 fn
+2. effect 第一次执行的时候还会执行 fn
+3. 当响应式对象 set update 不会执行 fn 而是执行 scheduler
+4. 如果说当执行 runner 的时候，会再次执行 fn
+
+在 effect 的 ReactiveEffect 类里面新增 scheduler?
+在 effect 的 trigger 方法执行时 判断是否存在 scheduler 存在就执行 scheduler 不存在执行 run 方法
