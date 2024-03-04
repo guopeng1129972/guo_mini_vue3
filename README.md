@@ -69,3 +69,20 @@ scheduler 的实现逻辑
 
 在 effect 的 ReactiveEffect 类里面新增 scheduler?
 在 effect 的 trigger 方法执行时 判断是否存在 scheduler 存在就执行 scheduler 不存在执行 run 方法
+
+# 09-实现 effect 的 stop 功能
+
+实现 stop:终止方法 接收一个 runner（effect 实例方法），
+
+1. 把 effect 实例绑定到 runner 上，然后把 runner return 出去，
+2. 在 ReactiveEffect 类上创建当前 activeEffect 的 deps 数组，建立映射关系；同时创建 active 标识，避免重复删除
+3. 在 ReactiveEffect 类上声明实例方法 stop，stop 方法中删除当前 activeEffect 的 dep 在对应的 deps 中的 dep
+4. 在 track 的时候 用 dep 收集 activeEffect 同步反向在 activeEffect 创建 deps 记录当前的 dep
+5. 抽离删除 dep 方法到 clearEffect
+6. 创建公共 extend 方法合并 options（Object.assign()）
+
+实现 onStop:stop 执行之后的回调方法
+
+1. 于 scheduler 相似，在 options 中传入 onStop 方法，绑定到\_effect 实例上
+2. 在 ReactiveEffect 类上创建当前 onStop 的 方法
+3. 当执行 stop 方法的时候 如果存在 onStop 方法 执行 onStop
