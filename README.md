@@ -93,3 +93,13 @@ scheduler 的实现逻辑
 2. 主要做代码优化，抽离逻辑
 3. readonly 来源于 reactive.ts ，创建 createActiveObject 优化 baseHandlers readonly ->readonlyHandlers reactive ->mutableHandlers
 4. 抽离出来 baseHandlers ，把之前的 createGetter createSetter readonlyGet 提到全局（这样就不用重复声明了），readonlyGet 区分 readonly , export mutableHandlers readonlyHandlers
+
+# 11-实现 isReactive 和 isReadonly
+
+isReactive:判断是不是 reactive
+
+1. 判断是不是 reactive 只需要访问属性，触发 get 方法，然后根据 isReadonly 参数判断即可，创建 ReactiveFlags 存储属性，通过访问 ReactiveFlags.IS_REACTIVE,触发 get 方法 即可判断是不是 reactive
+
+isReadonly:判断是不是 readonly
+
+1. 判断是不是 readonly 只需要访问属性，触发 get 方法，然后根据 isReadonly 参数判断即可，创建 ReactiveFlags 存储属性，通过访问 ReactiveFlags.IS_READONLY,触发 get 方法 即可判断是不是 readonly
