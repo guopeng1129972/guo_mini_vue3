@@ -1,18 +1,14 @@
-import { track, trigger } from "./effect";
+import { mutableHandlers, readonlyHandlers } from "./baseHandler";
 
 export function reactive(raw: any) {
-  return new Proxy(raw, {
-    get(target, key) {
-      const res = Reflect.get(target, key);
-      // todo 依赖收集 track
-      track(target, key);
-      return res;
-    },
-    set(target, key, value) {
-      const res = Reflect.set(target, key, value);
-      // todo 触发依赖 trigger
-      trigger(target, key);
-      return res;
-    },
-  });
+  return createActiveObject(raw, mutableHandlers);
+}
+
+// readonly reactive的只读模式 就是说没有set
+export const readonly = (raw: any) => {
+  return createActiveObject(raw, readonlyHandlers);
+};
+
+function createActiveObject(raw: any, baseHandlers: any) {
+  return new Proxy(raw, baseHandlers);
 }

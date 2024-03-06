@@ -86,3 +86,10 @@ scheduler 的实现逻辑
 1. 于 scheduler 相似，在 options 中传入 onStop 方法，绑定到\_effect 实例上
 2. 在 ReactiveEffect 类上创建当前 onStop 的 方法
 3. 当执行 stop 方法的时候 如果存在 onStop 方法 执行 onStop
+
+# 10-实现 readonly 功能
+
+1. 首先 readonly 与 reactive 类似 区别在于 readonly 是不能 set 的
+2. 主要做代码优化，抽离逻辑
+3. readonly 来源于 reactive.ts ，创建 createActiveObject 优化 baseHandlers readonly ->readonlyHandlers reactive ->mutableHandlers
+4. 抽离出来 baseHandlers ，把之前的 createGetter createSetter readonlyGet 提到全局（这样就不用重复声明了），readonlyGet 区分 readonly , export mutableHandlers readonlyHandlers
